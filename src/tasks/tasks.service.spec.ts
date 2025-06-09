@@ -35,7 +35,7 @@ describe('TasksService', () => {
     jest.clearAllMocks();
   });
 
-  it('deve criar uma tarefa', async () => {
+  it(' criar uma tarefa', async () => {
     const task = { id: 1, title: 'Teste', description: 'descrição', status: 'PENDENTE' };
     mockTaskRepository.create.mockReturnValue(task);
     mockTaskRepository.save.mockResolvedValue(task);
@@ -50,7 +50,7 @@ describe('TasksService', () => {
     expect(result).toEqual(task);
   });
 
-  it('deve retornar todas as tarefas', async () => {
+  it(' retornar todas as tarefas', async () => {
     const tasks = [{ id: 1, title: 'Tarefa 1', description: 'Descrição 1', status: 'PENDENTE' }];
     mockTaskRepository.find.mockResolvedValue(tasks);
 
@@ -59,7 +59,7 @@ describe('TasksService', () => {
     expect(result).toEqual(tasks);
   });
 
-  it('deve atualizar o status da tarefa', async () => {
+  it(' atualizar o status da tarefa', async () => {
     const task = { id: 1, title: 'Tarefa 1', description: 'Descrição 1', status: 'PENDENTE', save: jest.fn() };
     mockTaskRepository.findOneBy.mockResolvedValue(task);
     mockTaskRepository.save.mockResolvedValue({ ...task, status: 'CONCLUÍDO' });
@@ -71,18 +71,18 @@ describe('TasksService', () => {
     expect(result.status).toBe('CONCLUÍDO');
   });
 
-  it('deve lançar erro ao atualizar status de tarefa inexistente', async () => {
+  it(' lançar erro ao atualizar status de tarefa inexistente', async () => {
     mockTaskRepository.findOneBy.mockResolvedValue(null);
     await expect(service.updateTaskStatus(999, 'CONCLUÍDO')).rejects.toThrow('Tarefa não encontrada');
   });
 
-  it('deve deletar uma tarefa', async () => {
+  it(' deletar uma tarefa', async () => {
     mockTaskRepository.delete.mockResolvedValue({ affected: 1 });
     await expect(service.deleteTask(1)).resolves.toBeUndefined();
     expect(mockTaskRepository.delete).toHaveBeenCalledWith(1);
   });
 
-  it('deve lançar erro ao tentar deletar tarefa inexistente', async () => {
+  it(' lançar erro ao tentar deletar tarefa inexistente', async () => {
     mockTaskRepository.delete.mockResolvedValue({ affected: 0 });
     await expect(service.deleteTask(999)).rejects.toThrow('Tarefa não encontrada');
   });

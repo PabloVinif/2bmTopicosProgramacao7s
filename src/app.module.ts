@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { Task } from './tasks/task.entity';
 import { User } from './auth/user.entity';
 
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({

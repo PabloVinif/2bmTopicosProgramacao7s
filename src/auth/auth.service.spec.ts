@@ -47,7 +47,7 @@ describe('AuthService', () => {
     });
 
     describe('register', () => {
-        it('deve registrar um novo usuário com senha criptografada', async () => {
+        it('registrar um novo usuário com senha criptografada', async () => {
             mockUserRepository.findOne.mockResolvedValue(null);
             mockUserRepository.create.mockImplementation(dto => dto);
             mockUserRepository.save.mockResolvedValue({ id: 1, username: 'user1', password: 'hashed' });
@@ -62,7 +62,7 @@ describe('AuthService', () => {
             expect(mockUserRepository.save).toHaveBeenCalled();
         });
 
-        it('deve lançar conflito ao tentar registrar um username já existente', async () => {
+        it(' lançar conflito ao tentar registrar um username já existente', async () => {
             mockUserRepository.findOne.mockResolvedValue({ id: 1, username: 'user1', password: 'hashed' });
 
             await expect(service.register('user1', 'senha123')).rejects.toThrow(ConflictException);
@@ -70,7 +70,7 @@ describe('AuthService', () => {
     });
 
     describe('validateUser', () => {
-        it('deve retornar usuário quando username e senha estiverem corretos', async () => {
+        it(' retornar usuário quando username e senha estiverem corretos', async () => {
             const user = { id: 1, username: 'user1', password: 'hashed' };
             mockUserRepository.findOne.mockResolvedValue(user);
             jest.spyOn(bcrypt, 'compare').mockImplementation(() => Promise.resolve(true));
@@ -79,14 +79,14 @@ describe('AuthService', () => {
             expect(result).toEqual(user);
         });
 
-        it('deve retornar null quando usuário não existir', async () => {
+        it(' retornar null quando usuário não existir', async () => {
             mockUserRepository.findOne.mockResolvedValue(null);
 
             const result = await service.validateUser('user1', 'senha123');
             expect(result).toBeNull();
         });
 
-        it('deve retornar null quando senha for inválida', async () => {
+        it(' retornar null quando senha for inválida', async () => {
             const user = { id: 1, username: 'user1', password: 'hashed' };
             mockUserRepository.findOne.mockResolvedValue(user);
             jest.spyOn(bcrypt, 'compare').mockImplementation(() => Promise.resolve(false));
@@ -97,7 +97,7 @@ describe('AuthService', () => {
     });
 
     describe('login', () => {
-        it('deve retornar token JWT para usuário válido', async () => {
+        it(' retornar token JWT para usuário válido', async () => {
             const user = { id: 1, username: 'user1', password: 'hashed' };
             jest.spyOn(service, 'validateUser').mockResolvedValue(user);
             mockJwtService.sign.mockReturnValue('token123');
@@ -108,7 +108,7 @@ describe('AuthService', () => {
             expect(result).toEqual({ access_token: 'token123' });
         });
 
-        it('deve lançar UnauthorizedException para usuário inválido', async () => {
+        it(' lançar UnauthorizedException para usuário inválido', async () => {
             jest.spyOn(service, 'validateUser').mockResolvedValue(null);
 
             await expect(service.login('user1', 'senhaErrada')).rejects.toThrow(UnauthorizedException);
